@@ -6,19 +6,27 @@ import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 import { auth } from '@/firebase/firebase';
 
 export default function Navbar() {
-  const [user, setUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setCurrentUser(firebaseUser);
     });
 
     return () => unsubscribe();
   }, []);
 
   const handleLogout = async () => {
-    await signOut(auth);
-    alert('Logged out successfully!');
+    try {
+      await signOut(auth);
+      alert('Logged out successfully!');
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert('Unknown error during logout.');
+      }
+    }
   };
 
   return (
@@ -26,10 +34,10 @@ export default function Navbar() {
       <Link href="/" className="text-2xl font-bold text-blue-600">PustakLink</Link>
       <div className="flex gap-4 items-center">
         <Link href="/explore" className="hover:underline">Explore</Link>
-        {user ? (
+        {currentUser ? (
           <>
             <Link href="/sell" className="hover:underline">Sell</Link>
-            <span className="text-sm text-gray-600 hidden sm:inline">{user.email}</span>
+            <span className="text-sm text-gray-600 hidden sm:inline">{currentUser.email}</span>
             <button onClick={handleLogout} className="bg-red-500 text-white px-3 py-1 rounded">
               Logout
             </button>

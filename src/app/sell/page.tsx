@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, User } from 'firebase/auth';
 import { auth, db } from '@/firebase/firebase';
 import { addDoc, collection, Timestamp } from 'firebase/firestore';
 
 export default function SellBook() {
-  const [user, setUser] = useState<any>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [price, setPrice] = useState('');
@@ -15,10 +15,15 @@ export default function SellBook() {
   const router = useRouter();
 
   useEffect(() => {
-    onAuthStateChanged(auth, (u) => {
-      if (u) setUser(u);
-      else router.push('/login');
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser) {
+        setCurrentUser(firebaseUser);
+      } else {
+        router.push('/login');
+      }
     });
+
+    return () => unsubscribe();
   }, [router]);
 
   const handleImageUpload = async (): Promise<string> => {
@@ -41,8 +46,16 @@ export default function SellBook() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!currentUser) {
+      alert('Please log in to upload a book');
+      return;
+    }
+
     try {
-      if (!image) return alert('Please select an image');
+      if (!image) {
+        alert('Please select an image');
+        return;
+      }
 
       const imageUrl = await handleImageUpload();
 
@@ -51,7 +64,7 @@ export default function SellBook() {
         author,
         price: parseFloat(price),
         imageUrl,
-        sellerId: user.uid,
+        sellerId: currentUser.uid,
         createdAt: Timestamp.now(),
       });
 
