@@ -16,9 +16,14 @@ export default function SignUpPage() {
       await createUserWithEmailAndPassword(auth, email, password);
       alert('Account created!');
       router.push('/login');
-    } catch (error: any) {
-      alert(error.message);
-    }
+    } catch (error: unknown) {
+  if (error instanceof Error) {
+    alert(error.message);
+  } else {
+    alert('An unknown error occurred.');
+  }
+}
+
   };
 
   return (

@@ -16,9 +16,14 @@ export default function LoginPage() {
       await signInWithEmailAndPassword(auth, email, password);
       alert('Login successful!');
       router.push('/');
-    } catch (error: any) {
-      alert(`Login failed: ${error.message}`);
-    }
+    } catch (error: unknown) {
+  if (error instanceof Error) {
+    alert(error.message);
+  } else {
+    alert('An unknown error occurred.');
+  }
+}
+
   };
 
   return (
