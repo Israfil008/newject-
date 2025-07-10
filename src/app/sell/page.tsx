@@ -27,9 +27,11 @@ export default function SellBook() {
   }, [router]);
 
   const handleImageUpload = async (): Promise<string> => {
+    if (!image) throw new Error('No image selected');
+
     const formData = new FormData();
-    formData.append('file', image as Blob);
-    formData.append('upload_preset', 'unsigned_preset'); // Your Cloudinary unsigned preset
+    formData.append('file', image);
+    formData.append('upload_preset', 'unsigned_preset'); // Replace with your Cloudinary preset
 
     const res = await fetch(
       `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
@@ -43,7 +45,7 @@ export default function SellBook() {
     return data.secure_url;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!currentUser) {
@@ -110,7 +112,7 @@ export default function SellBook() {
         <input
           type="file"
           accept="image/*"
-          onChange={(e) => setImage(e.target.files?.[0] || null)}
+          onChange={(e) => setImage(e.target.files?.[0] ?? null)}
           required
         />
         <button type="submit" className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
