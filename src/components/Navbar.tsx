@@ -28,7 +28,8 @@ export default function Navbar() {
         <Link href="/explore" className="hover:underline">Explore</Link>
         {user ? (
           <>
-            <span className="text-sm text-gray-600">{user.email}</span>
+            <Link href="/sell" className="hover:underline">Sell</Link>
+            <span className="text-sm text-gray-600 hidden sm:inline">{user.email}</span>
             <button onClick={handleLogout} className="bg-red-500 text-white px-3 py-1 rounded">
               Logout
             </button>
@@ -41,7 +42,6 @@ export default function Navbar() {
             <Link href="/signup" className="bg-blue-500 text-white px-3 py-1 rounded">
               Sign Up
             </Link>
-            <Link href="/explore" className="hover:underline">Explore:</Link>
           </>
         )}
       </div>

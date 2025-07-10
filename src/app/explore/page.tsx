@@ -37,8 +37,12 @@ export default function ExplorePage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {books.map((book) => (
-            <div key={book.id} className="border rounded p-4 shadow">
-              <img src={book.imageUrl} alt={book.title} className="h-48 w-full object-cover rounded" />
+            <div key={book.id} className="border rounded p-4 shadow hover:shadow-lg">
+              <img
+                src={book.imageUrl}
+                alt={book.title}
+                className="h-48 w-full object-cover rounded"
+              />
               <h2 className="text-xl font-semibold mt-2">{book.title}</h2>
               <p className="text-gray-600">by {book.author}</p>
               <p className="text-blue-600 font-bold">Rs. {book.price}</p>
