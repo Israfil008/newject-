@@ -41,6 +41,8 @@ export default function Navbar() {
             <Link href="/signup" className="bg-blue-500 text-white px-3 py-1 rounded">
               Sign Up
             </Link>
+            <Link href="/explore" className="hover:underline">Explore</Link>
+
           </>
         )}
       </div>
