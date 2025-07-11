@@ -2,24 +2,12 @@ import { db } from "@/firebase/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import type { Metadata } from "next";
 
-// Type for route params
-interface BookDetailPageProps {
-  params: {
-    id: string;
-  };
-}
-
-// Optional: for SEO metadata
-export async function generateMetadata({ params }: BookDetailPageProps): Promise<Metadata> {
-  return {
-    title: `Book: ${params.id}`,
-    description: "Book detail page for used books on PustakLink.",
-  };
-}
-
-export default async function BookDetailPage({ params }: BookDetailPageProps) {
+export default async function BookDetailPage({
+  params,
+}: {
+  params: Record<"id", string>;
+}) {
   const docRef = doc(db, "books", params.id);
   const docSnap = await getDoc(docRef);
 
