@@ -1,57 +1,57 @@
-import Navbar from "@/components/Navbar";
-import Image from "next/image";
-
-const dummyBooks = [
+const books = [
   {
     id: 1,
-    title: "Fundamentals of Physics",
-    author: "Halliday, Resnick",
-    price: "Rs. 500",
-    image: "https://via.placeholder.com/300x160",
+    title: "Introduction to Algorithms",
+    author: "Thomas H. Cormen",
+    price: 1200,
+    thumbnail: "https://covers.openlibrary.org/b/id/8231996-L.jpg",
   },
   {
     id: 2,
-    title: "Organic Chemistry",
-    author: "Morrison & Boyd",
-    price: "Rs. 650",
-    image: "https://via.placeholder.com/300x160",
+    title: "Clean Code",
+    author: "Robert C. Martin",
+    price: 950,
+    thumbnail: "https://covers.openlibrary.org/b/id/7222246-L.jpg",
   },
   {
     id: 3,
-    title: "Mathematics Grade 12",
-    author: "HSEB",
-    price: "Rs. 400",
-    image: "https://via.placeholder.com/300x160",
+    title: "Physics for Scientists and Engineers",
+    author: "Raymond A. Serway",
+    price: 1500,
+    thumbnail: "https://covers.openlibrary.org/b/id/8234201-L.jpg",
+  },
+  {
+    id: 4,
+    title: "Discrete Mathematics and Its Applications",
+    author: "Kenneth Rosen",
+    price: 1300,
+    thumbnail: "https://covers.openlibrary.org/b/id/8099253-L.jpg",
   },
 ];
 
-export default function ExploreBooks() {
+export default function ExplorePage() {
   return (
-    <main className="min-h-screen bg-gray-50">
-      <Navbar />
-      <div className="p-6">
-        <h1 className="text-3xl font-bold mb-6 text-center">Explore Books</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {dummyBooks.map((book) => (
-            <div
-              key={book.id}
-              className="border rounded-xl p-4 shadow hover:shadow-lg transition duration-300 bg-white"
-            >
-              <div className="relative w-full h-40 mb-4">
-                <Image
-                  src={book.image}
-                  alt={book.title}
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded"
-                />
-              </div>
-              <h2 className="text-xl font-semibold">{book.title}</h2>
-              <p className="text-sm text-gray-600 mb-1">by {book.author}</p>
-              <p className="text-blue-600 font-bold">{book.price}</p>
-            </div>
-          ))}
-        </div>
+    <main className="min-h-screen bg-gray-50 py-10 px-6">
+      <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">
+        Explore Books
+      </h1>
+      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        {books.map((book) => (
+          <div
+            key={book.id}
+            className="bg-white rounded-lg shadow-md p-4 flex flex-col"
+          >
+            <img
+              src={book.thumbnail}
+              alt={`${book.title} cover`}
+              className="h-48 w-full object-cover rounded-md mb-4"
+              loading="lazy"
+            />
+            <h2 className="text-lg font-semibold text-gray-900">{book.title}</h2>
+            <p className="text-sm text-gray-600 mb-2">by {book.author}</p>
+            <p className="mt-auto font-semibold text-blue-600">Rs {book.price}</p>
+          </div>
+        ))}
       </div>
     </main>
   );
