@@ -1,4 +1,5 @@
 import Navbar from "@/components/Navbar";
+import Image from "next/image";
 
 const dummyBooks = [
   {
@@ -6,21 +7,21 @@ const dummyBooks = [
     title: "Fundamentals of Physics",
     author: "Halliday, Resnick",
     price: "Rs. 500",
-    image: "https://via.placeholder.com/150",
+    image: "https://via.placeholder.com/300x160",
   },
   {
     id: 2,
     title: "Organic Chemistry",
     author: "Morrison & Boyd",
     price: "Rs. 650",
-    image: "https://via.placeholder.com/150",
+    image: "https://via.placeholder.com/300x160",
   },
   {
     id: 3,
     title: "Mathematics Grade 12",
     author: "HSEB",
     price: "Rs. 400",
-    image: "https://via.placeholder.com/150",
+    image: "https://via.placeholder.com/300x160",
   },
 ];
 
@@ -36,11 +37,15 @@ export default function ExploreBooks() {
               key={book.id}
               className="border rounded-xl p-4 shadow hover:shadow-lg transition duration-300 bg-white"
             >
-              <img
-                src={book.image}
-                alt={book.title}
-                className="w-full h-40 object-cover rounded mb-4"
-              />
+              <div className="relative w-full h-40 mb-4">
+                <Image
+                  src={book.image}
+                  alt={book.title}
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded"
+                />
+              </div>
               <h2 className="text-xl font-semibold">{book.title}</h2>
               <p className="text-sm text-gray-600 mb-1">by {book.author}</p>
               <p className="text-blue-600 font-bold">{book.price}</p>
