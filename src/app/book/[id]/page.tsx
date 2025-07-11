@@ -3,10 +3,10 @@ import { doc, getDoc } from "firebase/firestore";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 
-export default async function BookDetailPage({
+export default async function Page({
   params,
 }: {
-  params: Record<"id", string>;
+  params: { id: string };
 }) {
   const docRef = doc(db, "books", params.id);
   const docSnap = await getDoc(docRef);
@@ -41,7 +41,9 @@ export default async function BookDetailPage({
         )}
         <h1 className="text-3xl font-bold text-gray-900 mb-2">{book.title}</h1>
         <h2 className="text-xl text-gray-700 mb-4">by {book.author}</h2>
-        <p className="text-lg text-blue-600 font-semibold mb-4">Price: Rs {book.price}</p>
+        <p className="text-lg text-blue-600 font-semibold mb-4">
+          Price: Rs {book.price}
+        </p>
         {book.description && (
           <p className="text-gray-700 leading-relaxed">{book.description}</p>
         )}
