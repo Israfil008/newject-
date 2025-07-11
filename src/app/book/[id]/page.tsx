@@ -3,7 +3,15 @@ import { doc, getDoc } from "firebase/firestore";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 
-export default async function BookDetailPage({ params }: any) {
+type Book = {
+  title: string;
+  author: string;
+  price: number;
+  description?: string;
+  imageUrl?: string;
+};
+
+export default async function BookDetailPage({ params }: { params: { id: string } }) {
   const docRef = doc(db, "books", params.id);
   const docSnap = await getDoc(docRef);
 
@@ -11,7 +19,7 @@ export default async function BookDetailPage({ params }: any) {
     notFound();
   }
 
-  const book = docSnap.data();
+  const book = docSnap.data() as Book;
 
   return (
     <main className="min-h-screen bg-gray-50 py-10 px-6">
