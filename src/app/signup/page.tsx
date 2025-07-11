@@ -1,60 +1,32 @@
-'use client';
-
-import React, { useState } from 'react';
-import { auth } from '@/firebase/firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+"use client";
+import { useState } from "react";
+import { auth } from "@/firebase/firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 export default function SignupPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [msg, setMsg] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError(null);
-    setSuccess(false);
-
+  const handle = async (e: React.FormEvent) => {
+    e.preventDefault(); setMsg(null);
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      setSuccess(true);
+      setMsg("Signup successful!");
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError('An unknown error occurred');
-      }
+      setMsg(err instanceof Error ? err.message : "Unknown error");
     }
   };
 
   return (
-    <div className="signup-container">
-      <h2>Sign Up</h2>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="email">Email:</label>
-        <input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-
-        <label htmlFor="password">Password:</label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          minLength={6}
-        />
-
-        <button type="submit">Sign Up</button>
+    <main className="p-8 flex justify-center items-center min-h-screen bg-gray-100">
+      <form onSubmit={handle} className="bg-white p-6 rounded shadow space-y-4">
+        <h1 className="text-xl font-bold">Sign Up</h1>
+        <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" className="w-full p-2 border rounded" />
+        <input type="password" required minLength={6} value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" className="w-full p-2 border rounded" />
+        <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded">Sign Up</button>
+        {msg && <p className="mt-2 text-center">{msg}</p>}
       </form>
-
-      {error && <p className="error-msg" style={{ color: 'red' }}>{error}</p>}
-      {success && <p className="success-msg" style={{ color: 'green' }}>User created successfully!</p>}
-    </div>
+    </main>
   );
 }

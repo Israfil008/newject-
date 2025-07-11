@@ -1,8 +1,7 @@
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
-// Your Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyDvMOB7Sj537752wGyApFh2865YnTt9qHY",
   authDomain: "pustaklink-ab06d.firebaseapp.com",
@@ -12,9 +11,6 @@ const firebaseConfig = {
   appId: "1:435791021437:web:eb6d432b04c24fbb743814",
 };
 
-// Initialize Firebase only once
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-
-// Export Firebase services
 export const auth = getAuth(app);
 export const db = getFirestore(app);
