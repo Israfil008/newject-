@@ -1,32 +1,35 @@
-// src/app/explore/page.tsx
-import { collection, getDocs } from "firebase/firestore";
+"use client";
+import { useEffect } from "react";
 import { db } from "@/firebase/firebase";
-import Link from "next/link";
-import { Book } from "../../types";
+import { collection, addDoc } from "firebase/firestore";
 
-export default async function ExplorePage() {
-  const snapshot = await getDocs(collection(db, "books"));
-  const books: Book[] = snapshot.docs.map(doc => ({
-    id: doc.id,
-    ...(doc.data() as Omit<Book, "id">),
-  }));
+export default function AddBooks() {
+  useEffect(() => {
+    async function seedBooks() {
+      const books = [
+        {
+          title: "The Alchemist",
+          author: "Paulo Coelho",
+          price: 500,
+          description: "A journey of a shepherd boy seeking treasure.",
+        },
+        {
+          title: "Sapiens",
+          author: "Yuval Noah Harari",
+          price: 850,
+          description: "A brief history of humankind.",
+        },
+      ];
 
-  return (
-    <main className="page-container">
-      <h1 className="text-center">Explore Books</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {books.length ? books.map(book => (
-          <Link href={`/book/${book.id}`} key={book.id}>
-            <div className="card">
-              <h2>{book.title}</h2>
-              <p>by {book.author}</p>
-              <p>Rs. {book.price}</p>
-            </div>
-          </Link>
-        )) : (
-          <p>No books found.</p>
-        )}
-      </div>
-    </main>
-  );
+      for (const book of books) {
+        await addDoc(collection(db, "books"), book);
+      }
+
+      alert("Books added!");
+    }
+
+    seedBooks();
+  }, []);
+
+  return <div className="text-white">Seeding books…</div>;
 }
