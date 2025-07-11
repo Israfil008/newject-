@@ -1,39 +1,32 @@
-'use client';
-import { useEffect, useState } from 'react';
-import { db } from '@/firebase/firebase';
-import { collection, getDocs } from 'firebase/firestore';
-import { Book } from '../../types';
-import Link from 'next/link';
+// src/app/explore/page.tsx
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@/firebase/firebase";
+import Link from "next/link";
+import { Book } from "../../types";
 
-const ExplorePage = () => {
-  const [books, setBooks] = useState<Book[]>([]);
-
-  useEffect(() => {
-    const fetchBooks = async () => {
-      const querySnapshot = await getDocs(collection(db, 'books'));
-      const booksList: Book[] = [];
-      querySnapshot.forEach((doc) => {
-        booksList.push({ id: doc.id, ...doc.data() } as Book);
-      });
-      setBooks(booksList);
-    };
-    fetchBooks();
-  }, []);
+export default async function ExplorePage() {
+  const snapshot = await getDocs(collection(db, "books"));
+  const books: Book[] = snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...(doc.data() as Omit<Book, "id">),
+  }));
 
   return (
-    <div>
-      <h1>Explore Books</h1>
-      {books.map((book) => (
-        <Link href={`/book/${book.id}`} key={book.id}>
-          <div>
-            <h2>{book.title}</h2>
-            <p>{book.author}</p>
-            <p>Rs. {book.price}</p>
-          </div>
-        </Link>
-      ))}
-    </div>
+    <main className="page-container">
+      <h1 className="text-center">Explore Books</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {books.length ? books.map(book => (
+          <Link href={`/book/${book.id}`} key={book.id}>
+            <div className="card">
+              <h2>{book.title}</h2>
+              <p>by {book.author}</p>
+              <p>Rs. {book.price}</p>
+            </div>
+          </Link>
+        )) : (
+          <p>No books found.</p>
+        )}
+      </div>
+    </main>
   );
-};
-
-export default ExplorePage;
+}
