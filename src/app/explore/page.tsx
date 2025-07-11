@@ -1,4 +1,14 @@
-const books = [
+import Image from "next/image";
+
+type Book = {
+  id: number;
+  title: string;
+  author: string;
+  price: number;
+  thumbnail: string;
+};
+
+const books: Book[] = [
   {
     id: 1,
     title: "Introduction to Algorithms",
@@ -41,10 +51,12 @@ export default function ExplorePage() {
             key={book.id}
             className="bg-white rounded-lg shadow-md p-4 flex flex-col"
           >
-            <img
+            <Image
               src={book.thumbnail}
               alt={`${book.title} cover`}
-              className="h-48 w-full object-cover rounded-md mb-4"
+              width={300}
+              height={192}
+              className="rounded-md mb-4 object-cover"
               loading="lazy"
             />
             <h2 className="text-lg font-semibold text-gray-900">{book.title}</h2>
