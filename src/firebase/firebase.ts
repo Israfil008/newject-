@@ -1,24 +1,24 @@
 // src/firebase/firebase.ts
-
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth"; // Import getAuth
 
-// Your Firebase config
 const firebaseConfig = {
-  apiKey: "AIzaSyDvMOB7Sj537752wGyApFh2865YnTt9qHY",
-  authDomain: "pustaklink-ab06d.firebaseapp.com",
-  projectId: "pustaklink-ab06d",
-  storageBucket: "pustaklink-ab06d.appspot.com", // fixed this typo from `.app` to `.app**spot.com**`
-  messagingSenderId: "435791021437",
-  appId: "1:435791021437:web:eb6d432b04c24fbb743814",
+  apiKey: "YOUR_API_KEY_HERE",
+  authDomain: "YOUR_AUTH_DOMAIN_HERE",
+  projectId: "YOUR_PROJECT_ID_HERE",
+  storageBucket: "YOUR_STORAGE_BUCKET_HERE",
+  messagingSenderId: "YOUR_SENDER_ID_HERE",
+  appId: "YOUR_APP_ID_HERE",
 };
 
-// Initialize app safely (to prevent duplicate initialization)
-const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+// Initialize Firebase app
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
-// Export services
-const auth = getAuth(app);
+// Export Firestore database
 const db = getFirestore(app);
 
-export { app, auth, db };
+// Initialize and export Firebase Auth
+const auth = getAuth(app);
+
+export { db, auth };

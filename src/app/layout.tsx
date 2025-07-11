@@ -1,17 +1,10 @@
-import React from "react";
 import Navbar from "@/components/Navbar";
-import "./globals.css";
 
-export const metadata = {
-  title: "PustakLink",
-  description: "Nepal's Used Book Marketplace",
-};
-
-type RootLayoutProps = {
+export default function RootLayout({
+  children,
+}: {
   children: React.ReactNode;
-};
-
-export default function RootLayout({ children }: RootLayoutProps) {
+}) {
   return (
     <html lang="en">
       <body>

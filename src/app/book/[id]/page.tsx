@@ -1,5 +1,4 @@
-"use client"; // remove if page is server-only (likely you want server-side here)
-
+// src/app/book/[id]/page.tsx
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/firebase/firebase";
 import Image from "next/image";
@@ -20,16 +19,18 @@ interface Props {
   params: PageParams;
 }
 
-// Next.js expects page components to be async functions with params
 export default async function BookPage({ params }: Props) {
   const { id } = params;
 
-  // Fetch book from Firestore
-  const bookRef = doc(db, "books", id);
-  const docSnap = await getDoc(bookRef);
+  const docRef = doc(db, "books", id);
+  const docSnap = await getDoc(docRef);
 
   if (!docSnap.exists()) {
-    return <div className="p-10 text-center text-red-600">Book not found!</div>;
+    return (
+      <div className="p-10 text-center text-red-600">
+        Book not found!
+      </div>
+    );
   }
 
   const bookData = docSnap.data() as Book;
