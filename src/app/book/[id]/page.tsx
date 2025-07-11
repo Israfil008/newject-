@@ -3,6 +3,13 @@ import { doc, getDoc } from "firebase/firestore";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 
+// Define the expected props
+interface BookPageProps {
+  params: {
+    id: string;
+  };
+}
+
 type Book = {
   title: string;
   author: string;
@@ -11,12 +18,12 @@ type Book = {
   imageUrl?: string;
 };
 
-export default async function BookDetailPage({ params }: { params: { id: string } }) {
+export default async function BookDetailPage({ params }: BookPageProps) {
   const docRef = doc(db, "books", params.id);
   const docSnap = await getDoc(docRef);
 
   if (!docSnap.exists()) {
-    notFound(); // Shows 404 page
+    notFound(); // trigger 404 page
   }
 
   const book = docSnap.data() as Book;
