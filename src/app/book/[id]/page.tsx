@@ -1,51 +1,49 @@
-import { db } from "@/firebase/firebase";
 import { doc, getDoc } from "firebase/firestore";
-import { notFound } from "next/navigation";
-import Image from "next/image";
+import { db } from "@/firebase/firebase";  // Make sure this path matches your firebase.ts location
+import React from "react";
 
-export default async function Page({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const docRef = doc(db, "books", params.id);
-  const docSnap = await getDoc(docRef);
+interface PageProps {
+  params: {
+    id: string;
+  };
+}
+
+interface Book {
+  title: string;
+  author: string;
+  price: string;
+  imageUrl?: string;
+  description?: string;
+}
+
+export default async function BookPage({ params }: PageProps) {
+  const { id } = params;
+
+  // Fetch the book document from Firestore by id
+  const bookRef = doc(db, "books", id);
+  const docSnap = await getDoc(bookRef);
 
   if (!docSnap.exists()) {
-    notFound();
+    return <div className="p-10 text-center text-red-600">Book not found!</div>;
   }
 
-  const book = docSnap.data() as {
-    title: string;
-    author: string;
-    price: number;
-    description?: string;
-    imageUrl?: string;
-  };
+  const bookData = docSnap.data() as Book;
 
   return (
-    <main className="min-h-screen bg-gray-50 py-10 px-6">
-      <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-8">
-        {book.imageUrl ? (
-          <Image
-            src={book.imageUrl}
-            alt={`${book.title} cover`}
-            width={500}
-            height={300}
-            className="rounded-md object-cover mb-6"
+    <main className="min-h-screen p-8 bg-gray-50">
+      <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6">
+        <h1 className="text-3xl font-bold mb-4">{bookData.title}</h1>
+        <p className="mb-2 text-gray-700"><strong>Author:</strong> {bookData.author}</p>
+        <p className="mb-2 text-gray-700"><strong>Price:</strong> NPR {bookData.price}</p>
+        {bookData.imageUrl && (
+          <img
+            src={bookData.imageUrl}
+            alt={bookData.title}
+            className="w-full max-w-sm rounded-md mb-4 object-contain"
           />
-        ) : (
-          <div className="h-64 bg-gray-200 rounded-md flex items-center justify-center text-gray-400 mb-6">
-            No Image Available
-          </div>
         )}
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">{book.title}</h1>
-        <h2 className="text-xl text-gray-700 mb-4">by {book.author}</h2>
-        <p className="text-lg text-blue-600 font-semibold mb-4">
-          Price: Rs {book.price}
-        </p>
-        {book.description && (
-          <p className="text-gray-700 leading-relaxed">{book.description}</p>
+        {bookData.description && (
+          <p className="text-gray-600">{bookData.description}</p>
         )}
       </div>
     </main>
