@@ -1,22 +1,20 @@
-import './globals.css';
-import { Inter } from 'next/font/google';
-import Navbar from '@/components/Navbar';
-
-const inter = Inter({ subsets: ['latin'] });
+import React from "react";
+import Navbar from "@/components/Navbar";
+import "./globals.css";
 
 export const metadata = {
-  title: 'PustakLink',
-  description: 'A free used-book marketplace',
+  title: "PustakLink",
+  description: "Nepal's Used Book Marketplace",
 };
 
-export default function RootLayout({
-  children,
-}: {
+type RootLayoutProps = {
   children: React.ReactNode;
-}) {
+};
+
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body>
         <Navbar />
         {children}
       </body>
