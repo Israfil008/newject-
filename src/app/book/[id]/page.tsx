@@ -1,12 +1,8 @@
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/firebase/firebase";  // Make sure this path matches your firebase.ts location
-import React from "react";
+"use client"; // remove if page is server-only (likely you want server-side here)
 
-interface PageProps {
-  params: {
-    id: string;
-  };
-}
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/firebase/firebase";
+import Image from "next/image";
 
 interface Book {
   title: string;
@@ -16,10 +12,19 @@ interface Book {
   description?: string;
 }
 
-export default async function BookPage({ params }: PageProps) {
+interface PageParams {
+  id: string;
+}
+
+interface Props {
+  params: PageParams;
+}
+
+// Next.js expects page components to be async functions with params
+export default async function BookPage({ params }: Props) {
   const { id } = params;
 
-  // Fetch the book document from Firestore by id
+  // Fetch book from Firestore
   const bookRef = doc(db, "books", id);
   const docSnap = await getDoc(bookRef);
 
@@ -36,10 +41,12 @@ export default async function BookPage({ params }: PageProps) {
         <p className="mb-2 text-gray-700"><strong>Author:</strong> {bookData.author}</p>
         <p className="mb-2 text-gray-700"><strong>Price:</strong> NPR {bookData.price}</p>
         {bookData.imageUrl && (
-          <img
+          <Image
             src={bookData.imageUrl}
             alt={bookData.title}
-            className="w-full max-w-sm rounded-md mb-4 object-contain"
+            width={400}
+            height={500}
+            className="rounded-md mb-4 object-contain"
           />
         )}
         {bookData.description && (
