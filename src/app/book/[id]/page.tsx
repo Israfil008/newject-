@@ -1,37 +1,32 @@
 'use client';
+
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
 import { db } from '@/firebase/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import { Book } from '../../../types';
+import { useParams } from 'next/navigation';
 
-
-const BookDetailPage = () => {
+export default function BookDetailsPage() {
   const { id } = useParams();
-  const [book, setBook] = useState<Book | null>(null);
+  const [book, setBook] = useState<any>(null);
 
   useEffect(() => {
-    const fetchBook = async () => {
+    async function fetchBook() {
       const docRef = doc(db, 'books', id as string);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        setBook({ id: docSnap.id, ...docSnap.data() } as Book);
+        setBook(docSnap.data());
       }
-    };
+    }
     fetchBook();
   }, [id]);
 
-  if (!book) return <div>Loading...</div>;
+  if (!book) return <p className="text-center mt-10">Loading book details...</p>;
 
   return (
-    <div>
-      <h1>{book.title}</h1>
-      <p>By {book.author}</p>
-      <p>Price: Rs. {book.price}</p>
-      {book.description && <p>{book.description}</p>}
-      {book.imageUrl && <img src={book.imageUrl} alt={book.title} />}
+    <div className="p-6 max-w-3xl mx-auto">
+      <h1 className="text-3xl font-bold mb-4">{book.title}</h1>
+      <p className="text-lg mb-2">Author: {book.author}</p>
+      <p className="text-lg mb-2">Price: {book.price}</p>
     </div>
   );
-};
-
-export default BookDetailPage;
+}

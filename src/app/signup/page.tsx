@@ -1,32 +1,43 @@
-"use client";
-import { useState } from "react";
-import { auth } from "@/firebase/firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+'use client';
+
+import { useState } from 'react';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '@/firebase/firebase';
+import { useRouter } from 'next/navigation';
 
 export default function SignupPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [msg, setMsg] = useState<string | null>(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const router = useRouter();
 
-  const handle = async (e: React.FormEvent) => {
-    e.preventDefault(); setMsg(null);
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      setMsg("Signup successful!");
-    } catch (err: unknown) {
-      setMsg(err instanceof Error ? err.message : "Unknown error");
+      router.push('/login');
+    } catch (err) {
+      alert('Signup failed');
     }
   };
 
   return (
-    <main className="p-8 flex justify-center items-center min-h-screen bg-gray-100">
-      <form onSubmit={handle} className="bg-white p-6 rounded shadow space-y-4">
-        <h1 className="text-xl font-bold">Sign Up</h1>
-        <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" className="w-full p-2 border rounded" />
-        <input type="password" required minLength={6} value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" className="w-full p-2 border rounded" />
-        <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded">Sign Up</button>
-        {msg && <p className="mt-2 text-center">{msg}</p>}
+    <div className="p-6 max-w-xl mx-auto">
+      <h1 className="text-3xl font-bold mb-6 text-center">Sign Up</h1>
+      <form onSubmit={handleSignup} className="flex flex-col gap-4">
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+        />
+        <button type="submit">Sign Up</button>
       </form>
-    </main>
+    </div>
   );
 }
